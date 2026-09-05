@@ -1,0 +1,70 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "id": 1,
+      "title": "Global SD-WAN Site Availability (Tata / Kyndryl MSP)",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "avg(up{job=\"sdwan_edge_telemetry\"}) * 100",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "yellow", "value": 99.5 },
+              { "color": "green", "value": 99.95 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "id": 2,
+      "title": "SASE Gateway Transit Latency (IBM / Orange MSSP)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "sase_transit_latency_seconds * 1000",
+          "legendFormat": "{{ provider }} - {{ scope }}",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 45 }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["satech", "executive", "msp", "sla"],
+  "time": { "from": "now-6h", "to": "now" },
+  "title": "SATECH Executive Observability & Vendor SLA Dashboard",
+  "uid": "satech-exec-kpi"
+}
