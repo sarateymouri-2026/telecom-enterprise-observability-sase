@@ -1,0 +1,35 @@
+groups:
+  - name: satech_sla_alerts
+    rules:
+      - alert: PlantSiteLineDownP1
+        expr: up{job="sdwan_edge_telemetry"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          impact: P1_Plant_Line_Downtime
+          owner: Tata_Kyndryl_MSP
+        annotations:
+          summary: "SATECH Manufacturing Plant Edge Node Down"
+          description: "SD-WAN Edge Node {{ $labels.instance }} in {{ $labels.region }} is unreachable. Immediate P1 escalation triggered."
+
+      - alert: SASEGatewayHighLatencyP2
+        expr: sase_transit_latency_seconds > 0.045
+        for: 2m
+        labels:
+          severity: major
+          impact: P2_User_Experience_Degraded
+          owner: IBM_Orange_MSSP
+        annotations:
+          summary: "SASE Zero Trust Gateway Latency Threshold Exceeded"
+          description: "SASE transit latency is {{ $value }}s, exceeding the 45ms SLA threshold for over 2 minutes."
+
+      - alert: WANUnderlayPacketLossBreach
+        expr: wan_packet_loss_ratio > 0.005
+        for: 5m
+        labels:
+          severity: warning
+          impact: P3_SLA_Penalty_Warning
+          owner: Tata_Kyndryl_MSP
+        annotations:
+          summary: "WAN Underlay Packet Loss Breach Detected"
+          description: "Packet loss ratio on {{ $labels.instance }} is {{ $value }}, breaching the 0.5% SLA limit."
