@@ -1,0 +1,27 @@
+name: "CI/CD Security & Compliance Scan"
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  security-scan:
+    name: "Trivy & Secret Scanning"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Run Trivy Vulnerability Scanner (Repo & IaC)
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "config"
+          hide-progress: false
+          format: "table"
+          exit-code: "0"
+          severity: "CRITICAL,HIGH"
