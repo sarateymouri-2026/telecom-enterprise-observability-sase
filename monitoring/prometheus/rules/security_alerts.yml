@@ -1,0 +1,22 @@
+groups:
+  - name: satech_security_alerts
+    rules:
+      - alert: HostSSHBruteForceAttempt
+        expr: rate(node_ssh_failed_logins_total[5m]) > 5
+        for: 1m
+        labels:
+          severity: critical
+          compliance: ISA_IEC_62443
+        annotations:
+          summary: "SSH Brute Force Attack Detected on Edge Node"
+          description: "Instance {{ $labels.instance }} detected elevated SSH authentication failures."
+
+      - alert: UnauthorizedRootLogin
+        expr: node_active_root_sessions > 0
+        for: 0m
+        labels:
+          severity: critical
+          compliance: ISO_27001
+        annotations:
+          summary: "Active Root SSH Session Detected"
+          description: "Direct root session opened on {{ $labels.instance }}. Violation of privilege access policy."

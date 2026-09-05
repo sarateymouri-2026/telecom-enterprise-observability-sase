@@ -1,13 +1,9 @@
 global:
   scrape_interval: 15s
   evaluation_interval: 15s
-  external_labels:
-    origin: "satech-global-observability"
-    environment: "production"
 
 rule_files:
-  - "/etc/prometheus/rules/sla_alerts.yml"
-  - "/etc/prometheus/rules/network_performance.yml"
+  - "rules/*.yml"
 
 scrape_configs:
   - job_name: "prometheus"
@@ -15,17 +11,7 @@ scrape_configs:
       - targets: ["localhost:9090"]
 
   - job_name: "sdwan_edge_telemetry"
-    metrics_path: "/metrics"
-    static_configs:
-      - targets: ["10.100.10.1:9100", "10.100.20.1:9100"]
-        labels:
-          vendor: "Tata_Kyndryl_MSP"
-          region: "EMEA_Plants"
-
-  - job_name: "sase_ztna_gateways"
-    metrics_path: "/sase/metrics"
-    static_configs:
-      - targets: ["sase-collector.satech.internal:9115"]
-        labels:
-          provider: "IBM_Orange_MSSP"
-          scope: "Zero_Trust_Access"
+    file_sd_configs:
+      - files:
+          - "/etc/prometheus/targets/*.json"
+        refresh_interval: 1m
